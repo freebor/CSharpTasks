@@ -10,7 +10,14 @@ namespace UdemyCourse
     {
         static void Main(string[] args)
         {
-
+            for (int i = 0; i < 5; i++)
+            {
+                for(int p = 1; p < 50; p++)
+                {
+                    Console.WriteLine($"answer to the first loop is {i}, answer to the second loop is {p} ");
+                }
+            }
+            Console.ReadKey();
         }
     }
 }

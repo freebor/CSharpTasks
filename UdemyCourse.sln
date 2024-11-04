@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UdemyCourse", "UdemyCourse.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CalculatorTask", "..\CalculatorTask\CalculatorTask.csproj", "{83EFC75F-99F8-40CC-B6F1-611F86C40944}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TodoApp", "..\TodoApp\TodoApp.csproj", "{443BC470-96AD-4E81-911E-C8A207A66F04}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{83EFC75F-99F8-40CC-B6F1-611F86C40944}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{83EFC75F-99F8-40CC-B6F1-611F86C40944}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{83EFC75F-99F8-40CC-B6F1-611F86C40944}.Release|Any CPU.Build.0 = Release|Any CPU
+		{443BC470-96AD-4E81-911E-C8A207A66F04}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{443BC470-96AD-4E81-911E-C8A207A66F04}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{443BC470-96AD-4E81-911E-C8A207A66F04}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{443BC470-96AD-4E81-911E-C8A207A66F04}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
