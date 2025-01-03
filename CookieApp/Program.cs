@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Text.Json;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -10,127 +12,156 @@ namespace CookieApp
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Create a new cookie reciepe! Available ingredients are:");
-            List<string> cookieIngredient = new List<string>()
-            {
-                "Wheat flour ",
-                "Coconut flour",
-                "Butter",
-                "Chocolate",
-                "Sugar",
-                "Cardamom",
-                "Cinnamon",
-                "Cocoa powder",
-            };
+            string jsonFilePath = "cookie_ingredient.txt";
 
+            List<CookieIngredient> cookieIngredient = new List<CookieIngredient>
+            {
+                new WheatFlour(),
+                new CoconutFlour(),
+                new Butter(),
+                new Chocolate(),
+                new Sugar(),
+                new Cardamom(),
+                new Cinnamon(),
+                new CocoaPowder(),
+            };
+            List<CookieIngredient> listForSavingInputedIngredient = new List<CookieIngredient>();
+            List<int> cookiesSavedId = new List<int>();
+            List<List<int>> cookieSessions = new List<List<int>>();
+
+
+
+            //get all the list of ID'S in the json file 
+            if (File.Exists(jsonFilePath)) 
+            {
+                string jsonCookie = File.ReadAllText(jsonFilePath);
+                //create an empty list of pre-existing cookin ingredient from json file
+                cookieSessions = JsonSerializer.Deserialize<List<List<int>>>(jsonCookie);
+
+            }
+            for (int i = 0; i < cookieSessions.Count; i++)
+            {
+                Console.WriteLine($"------{i + 1}------");
+                foreach (var item in cookieSessions[i])
+                {
+                    //find the Id in the cookie ingredient list to know what type of cookie ingredient it is
+                    Console.WriteLine(cookieIngredient[item - 1]);
+                }
+
+            }
+
+
+
+            Console.WriteLine("Create a new cookie reciepe! Available ingredients are:");
+            //display my beginning list of all cookies
             int cookieCount = 1;
             foreach (var item in cookieIngredient)
             {
-                Console.WriteLine($"{cookieCount} . {item}");
+                Console.WriteLine($"{cookieCount} . {item.Name}");
                 cookieCount++;
             }
 
-            //bool isTrue = false;
-            List<string> addedIngredient = new List<string>();
-            //do 
-            //{
-            //    Console.WriteLine("Add an ingredient by its Id or type anything else if finished.");
-            //    var cookie = Console.ReadLine();
-            //    if (!int.TryParse(cookie, out int cookieToInt) || cookieToInt < 1 || cookieToInt > cookieIngredient.Count)
-            //    {
-            //        isTrue = false;
-            //    }   
-                
-            //} while(isTrue);
+            //validation of user input
+            bool isTrue;
+            do
+            {
+                Console.WriteLine("Add an ingredient by its Id or type anything else if finished.");
+                var cookie = Console.ReadLine();
+                isTrue = int.TryParse(cookie, out int cookieToInt) && cookieToInt > 0 && cookieToInt <= cookieIngredient.Count;
+                if(isTrue)
+                {
+                    listForSavingInputedIngredient.Add(cookieIngredient[cookieToInt - 1]);
+                    cookiesSavedId.Add(cookieToInt);
+                }
+                else
+                {
+                    Console.WriteLine("\nInvalid Selection, Displaying all Selected Cookie Ingredient...");
+                }
 
-            //addedIngredient.Add(cookieIngredient[cookieToInt - 1]);
-            //Console.WriteLine($"{cookieIngredient[cookieToInt - 1]} added...");
+            } while (isTrue);
+
+
+            //adding the id's in the current section to my list of arrays
+            if(cookiesSavedId.Count > 0)
+            {
+                cookieSessions.Add(cookiesSavedId);
+            }
+
+            // sending data from cookie list to json
+            File.WriteAllText(jsonFilePath, JsonSerializer.Serialize(cookieSessions));
+
+            //printing the selected cookie reciepe
+            Console.WriteLine("\n Reciepe Added: ");
+            foreach (var item in listForSavingInputedIngredient)
+            {
+                Console.WriteLine($"{item.Name}. {item.Description}. add to other ingredients.");
+                    
+            }
+
+
             Console.ReadKey();
         }
 
-        public enum cookieEnums
+
+        public abstract class CookieIngredient
         {
-            WheatFlour = 1,
-            CoconutFlour,
-            Butter,
-            Chocolate,
-            Sugar,
-            Cardamom,
-            Cinnamon,
-            CocoaPowder,
+            public string Name { get; set; }
+            public string Description { get; set; }
+            protected CookieIngredient(string name, string description)
+            {
+                Name = name;
+                Description = description;
+
+            }
+            public override string ToString() 
+            {
+                return $"{Name}. {Description}";
+            }
+
+
         }
 
-        public abstract class CookieIgredient
+        public class WheatFlour : CookieIngredient
         {
-            public virtual string Name { get; set; }
-            public abstract void Description();
-
-
+            public WheatFlour() : base("Wheat flour", "discription") { }
+            
         }
 
-        public class WheatFlour : CookieIgredient
+        public class CoconutFlour : CookieIngredient
         {
-            public override string Name => "Wheat flour";
-            public override void Description() 
-            { 
-                Console.WriteLine("hello world"); 
-            }
+            public CoconutFlour() : base("Coconut flour", "discription") { }
+
         }
-        public class CoconutFlour : CookieIgredient
+
+        public class Butter : CookieIngredient
         {
-            public override string Name => "Coconut flour";
-            public override void Description() 
-            { 
-                Console.WriteLine("hello world"); 
-            }
+            public Butter() : base("Butter", "discription") { }
         }
-        public class Butter : CookieIgredient
+
+        public class Chocolate : CookieIngredient
         {
-            public override string Name => "Butter";
-            public override void Description() 
-            { 
-                Console.WriteLine("hello world"); 
-            }
+            public Chocolate() : base("Chocolate", "discription") { }
         }
-        public class Chocolate : CookieIgredient
+        public class Sugar : CookieIngredient
         {
-            public override string Name => "Chocolate";
-            public override void Description() 
-            { 
-                Console.WriteLine("hello world"); 
-            }
+            public Sugar() : base("Sugar", "discription") { }
+
         }
-        public class Sugar : CookieIgredient
+
+        public class Cardamom : CookieIngredient
         {
-            public override string Name => "Sugar";
-            public override void Description() 
-            { 
-                Console.WriteLine("hello world"); 
-            }
+            public Cardamom() : base("Cardamom", "discription") { }
         }
-        public class Cardamom : CookieIgredient
+
+        public class Cinnamon : CookieIngredient
         {
-            public override string Name => "Cardamom";
-            public override void Description() 
-            { 
-                Console.WriteLine("hello world"); 
-            }
+            public Cinnamon() : base("Cinnamon", "discription") { }
+
         }
-        public class Cinnamon : CookieIgredient
+        public class CocoaPowder : CookieIngredient
         {
-            public override string Name => "Cinnamon";
-            public override void Description() 
-            { 
-                Console.WriteLine("hello world"); 
-            }
-        }
-        public class CocoaPowder : CookieIgredient
-        {
-            public override string Name => "Cocoa powder";
-            public override void Description() 
-            { 
-                Console.WriteLine("hello world"); 
-            }
+            public CocoaPowder() : base("CocoaPowder", "discription") { }
+
         }
     }
 }
