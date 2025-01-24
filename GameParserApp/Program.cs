@@ -21,14 +21,14 @@ namespace GameParserApp
         public class Game
         {
             public string Title { get; set; }
-            public string ReleaseYear { get; set; }
-            public string Rating { get; set; }
+            public int ReleaseYear { get; set; }
+            public double Rating { get; set; }
         }
         public class GameParserApp
         {
             public void Run()
             {
-                do
+                while (true)
                 {
                     Console.WriteLine("Please enter the file name");
                     var fileNameInput = Console.ReadLine();
@@ -47,6 +47,10 @@ namespace GameParserApp
                         if (!File.Exists(fileNameInput))
                         {
                             throw new FileNotFoundException("The specified file does not exist.", fileNameInput);
+                        }
+                        else
+                        {
+
                         }
 
 
@@ -67,6 +71,8 @@ namespace GameParserApp
                             {
                                 Console.WriteLine($"Title: {game.Title}, Release Year: {game.ReleaseYear}, Rating: {game.Rating}");
                             }
+
+
                             break;
 
                         }
@@ -90,7 +96,6 @@ namespace GameParserApp
                         Console.WriteLine($"An unexpected error occurred: {ex.Message}");
                     }
                 }
-                while (true);
             }
         }
     }
