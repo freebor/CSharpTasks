@@ -6,7 +6,7 @@ using System.Text.Json;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace CookieApp
+namespace CookieRecipeAppUsingLINQ
 {
     internal class Program
     {
@@ -32,35 +32,37 @@ namespace CookieApp
 
 
             //get all the list of ID'S in the json file 
-            if (File.Exists(jsonFilePath)) 
+            if (File.Exists(jsonFilePath))
             {
                 string jsonCookie = File.ReadAllText(jsonFilePath);
                 //create an empty list of pre-existing cookin ingredient from json file
                 cookieSessions = JsonSerializer.Deserialize<List<List<int>>>(jsonCookie);
 
             }
-            for (int i = 0; i < cookieSessions.Count; i++)
+            if (cookieSessions.Any())
             {
-                Console.WriteLine($"------{i + 1}------");
-                foreach (var item in cookieSessions[i])
-                {
-                    //find the Id in the cookie ingredient list to know what type of cookie ingredient it is
-                    Console.WriteLine(cookieIngredient[item - 1]);
-                }
-
+                cookieSessions
+                    .Select((session, index) => new { Session = session, Index = index })
+                    .ToList()
+                    .ForEach(session =>
+                    {
+                        Console.WriteLine($"-----{session.Index + 1}-----");
+                        session.Session
+                            .Select(id => cookieIngredient.ElementAtOrDefault(id - 1))
+                            .Where(ingredent => ingredent != null)
+                            .ToList()
+                            .ForEach(ingredient => Console.WriteLine(ingredient));
+                    });
             }
-
 
 
             Console.WriteLine("Create a new cookie reciepe! Available ingredients are:");
             //display my available list of all cookies
 
-            int cookieCount = 1;
-            foreach (var item in cookieIngredient)
-            {
-                Console.WriteLine($"{cookieCount} . {item.Name}");
-                cookieCount++;
-            }
+            cookieIngredient
+                .Select((ingredient, index) => $"{index + 1} . {ingredient.Name}")
+                .ToList()
+                .ForEach(Console.WriteLine);
 
             //validation of user input
             bool isTrue;
@@ -69,7 +71,7 @@ namespace CookieApp
                 Console.WriteLine("Add an ingredient by its Id or type anything else if finished.");
                 var cookie = Console.ReadLine();
                 isTrue = int.TryParse(cookie, out int cookieToInt) && cookieToInt > 0 && cookieToInt <= cookieIngredient.Count;
-                if(isTrue)
+                if (isTrue)
                 {
                     listForSavingInputedIngredient.Add(cookieIngredient[cookieToInt - 1]);
                     cookiesSavedId.Add(cookieToInt);
@@ -84,23 +86,25 @@ namespace CookieApp
 
             //adding the id's in the current section to my list of arrays
 
-            if (cookiesSavedId.Count > 0)
+            if (cookiesSavedId.Any())
             {
                 cookieSessions.Add(cookiesSavedId);
             }
+
 
             // sending data from cookie list to json
             File.WriteAllText(jsonFilePath, JsonSerializer.Serialize(cookieSessions));
 
             //printing the selected cookie reciepe
-
             Console.WriteLine("\n Reciepe Added: ");
-            foreach (var item in listForSavingInputedIngredient)
-            {
-                Console.WriteLine($"{item.Name}. {item.Description}. add to other ingredients.");
+            listForSavingInputedIngredient
+                .Select((item) => $"{item.Name}. {item.Description} add to other ingredients.")
+                .ToList()
+                .ForEach(Console.WriteLine);
 
-            }
+            //or 
 
+            //listForSavingInputedIngredient.ForEach(ingredient => Console.WriteLine($"{ingredient.Name}. {ingredient.Description} add to other ingredients."));
 
             Console.ReadKey();
         }
@@ -116,7 +120,7 @@ namespace CookieApp
                 Description = description;
 
             }
-            public override string ToString() 
+            public override string ToString()
             {
                 return $"{Name}. {Description}";
             }
@@ -127,7 +131,7 @@ namespace CookieApp
         public class WheatFlour : CookieIngredient
         {
             public WheatFlour() : base("Wheat flour", "discription") { }
-            
+
         }
 
         public class CoconutFlour : CookieIngredient
