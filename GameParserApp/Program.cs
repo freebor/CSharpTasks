@@ -34,8 +34,6 @@ namespace GameParserApp
                     var fileNameInput = Console.ReadLine();
 
 
-
-
                     try
                     {
                         if (string.IsNullOrWhiteSpace(fileNameInput))

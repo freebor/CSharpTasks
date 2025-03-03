@@ -10,14 +10,85 @@ namespace UdemyCourse
     {
         static void Main(string[] args)
         {
-            for (int i = 0; i < 5; i++)
+
+            var cookiesReciepesApp = new CookiesRecipesApp(
+                new RecipesRepository(),
+                new RecipesConsoleUserInteraction());
+            CookiesRecipesApp.Run();
+
+            Console.ReadKey();
+        }
+
+        public class CookiesRecipesApp
+        {
+            private readonly IRecipesRepository _recipesRepository;
+            private readonly IRecipesUserInteraction _recipesUserInteraction;
+
+            public CookiesRecipesApp(
+                IRecipesRepository recipesRepository,
+                IRecipesUserInteraction recipesUserInteraction)
             {
-                for(int p = 1; p < 50; p++)
-                {
-                    Console.WriteLine($"answer to the first loop is {i}, answer to the second loop is {p} ");
-                }
+                _recipesRepository = recipesRepository;
+                _recipesUserInteraction = recipesUserInteraction;
             }
+            public void Run()
+            {
+                var allRecipes = _recipesRepository.Read(filePath);
+                _recipesUserInteraction.PrintExistingRecipes(allRecipes);
+
+                _recipesUserInteraction.PromptToCreateRecipe();
+
+                var ingredient = _recipesUserInteraction.ReadIngredientFromUser();
+
+                if(ingredient.Count > 0)
+                {
+                    new recipes = new Recipe(ingredient);
+                    allRecipes.Add(recipe);
+                    _recipesRepository.Write(filePath, allRecipes);
+
+                    _recipesUserInteraction.ShowMessage("Recipe Added: ");
+                    _recipesUserInteraction.ShowMessage(recipesRepository.ToString());
+                }
+                else
+                {
+                    _recipesUserInteraction.ShowMessage(
+                        "No ingredient have been selected. " +
+                        "Reciepe will not be saved. ");
+                }
+                
+                _recipesUserInteraction.Exit();
+            }
+        }
+    }
+
+    
+    public interface RecipesConsoleUserInteraction : IRecipesUserInteraction
+    {
+        public void ShowMessage(string message);
+
+        public void Exit();
+    }
+
+    public class RecipesConsoleUserInteraction
+    {
+
+        public void ShowMessage(string message)
+        {
+            Console.WriteLine(message);
+        }
+        public void Exit()
+        {
+            Console.WriteLine("Press Any Key to close..");
             Console.ReadKey();
         }
     }
+
+    internal interface IRecipesRepository
+    {
+    }
+    
+    internal interface RecipesRepository : IRecipesRepository
+    {
+    }
+
 }

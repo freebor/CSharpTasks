@@ -76,6 +76,16 @@
   <ItemGroup>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Recipes\Help\Butter.cs" />
+    <Compile Include="Recipes\Ingredient\Cardamom.cs" />
+    <Compile Include="Recipes\Ingredient\Chocolate.cs" />
+    <Compile Include="Recipes\Ingredient\Cinnamon.cs" />
+    <Compile Include="Recipes\Ingredient\CocoaPowder.cs" />
+    <Compile Include="Recipes\Ingredient\CoconutFlour.cs" />
+    <Compile Include="Recipes\Ingredient\Ingredient.cs" />
+    <Compile Include="Recipes\Ingredient\Recipe.cs" />
+    <Compile Include="Recipes\Ingredient\Sugar.cs" />
+    <Compile Include="Recipes\Ingredient\WheatFlour.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
